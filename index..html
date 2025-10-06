@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Button</title>
+    <style>
+        :root {
+            --primary-color: #4e54c8;
+            --secondary-color: #8f94fb;
+            --background-color: #f8f9fa;
+            --text-color: #212529;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary-color: #8f94fb;
+            --secondary-color: #4e54c8;
+            --background-color: #121212;
+            --text-color: #e6e6e6;
+            --card-bg: #1e1e1e;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-main {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-main:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .message-box {
+            margin: 20px 0;
+            min-height: 60px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(79, 84, 200, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        .counter {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .achievements {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .achievement {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: rgba(79, 84, 200, 0.1);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .achievement.unlocked {
+            background-color: rgba(76, 175, 80, 0.2);
+            transform: scale(1.02);
+        }
+
+        .achievement-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f0f;
+            animation: confetti-fall 5s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .easter-egg {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.8rem;
+            opacity: 0.3;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(79, 84, 200, 0.2);
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 5px;
+            transition: width 0.5s;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        /* Stile per la barra di scorrimento */
+        .achievements::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .achievements::-webkit-scrollbar-track {
+            background: rgba(79, 84, 200, 0.1);
+            border-radius: 10px;
+        }
+
+        .achievements::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        .achievements::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        .special-achievement {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #8b6914;
+            font-weight: bold;
+            border: 2px solid #ffd700;
+        }
+
+        .legendary-achievement {
+            background: linear-gradient(45deg, #c0c0c0, #e8e8e8);
+            color: #5a5a5a;
+            font-weight: bold;
+            border: 2px solid #c0c0c0;
+        }
+
+        .godlike-achievement {
+            background: linear-gradient(45deg, #ff9900, #ffcc00);
+            color: #8b4500;
+            font-weight: bold;
+            border: 2px solid #ff9900;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Button</h1>
+        
+        <div class="theme-toggle" id="themeToggle">🌙</div>
+        
+        <div class="counter">Clic totali: <span id="clickCount">0</span></div>
+        
+        <div class="progress-text">Progresso verso il prossimo obiettivo: <span id="nextGoal">5</span> clic</div>
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+        
+        <button class="button-main" id="mainButton">PREMI QUI!</button>
+        
+        <div class="message-box" id="messageBox">
+            Clicca il pulsante per iniziare la magia!
+        </div>
+        
+        <div class="achievements">
+            <h3>Obiettivi:</h3>
+            <div class="achievement" id="achievement1">
+                <span class="achievement-icon">🔒</span> 5 clic - Primi passi
+            </div>
+            <div class="achievement" id="achievement2">
+                <span class="achievement-icon">🔒</span> 10 clic - Appassionato
+            </div>
+            <div class="achievement" id="achievement3">
+                <span class="achievement-icon">🔒</span> 30 clic - Maniaco del pulsante
+            </div>
+            <div class="achievement" id="achievement4">
+                <span class="achievement-icon">🔒</span> 50 clic - Esperto del clic
+            </div>
+            <div class="achievement" id="achievement5">
+                <span class="achievement-icon">🔒</span> 100 clic - Maestro del pulsante
+            </div>
+            <div class="achievement" id="achievement6">
+                <span class="achievement-icon">🔒</span> 1,000 clic - Leggenda del clic
+            </div>
+            <div class="achievement" id="achievement7">
+                <span class="achievement-icon">🔒</span> 10,000 clic - Eroe del clic
+            </div>
+            <div class="achievement" id="achievement8">
+                <span class="achievement-icon">🔒</span> 100,000 clic - Divinità del clic
+            </div>
+        </div>
+        
+        <div class="easter-egg" id="easterEgg">?</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementi DOM
+            const themeToggle = document.getElementById('themeToggle');
+            const mainButton = document.getElementById('mainButton');
+            const messageBox = document.getElementById('messageBox');
+            const clickCountElement = document.getElementById('clickCount');
+            const easterEgg = document.getElementById('easterEgg');
+            const progressBar = document.getElementById('progressBar');
+            const nextGoalElement = document.getElementById('nextGoal');
+            
+            // Variabili di stato
+            let clickCount = 0;
+            let isDarkMode = false;
+            
+            // Array di messaggi casuali
+            const messages = [
+                "Wow, hai cliccato! Rivoluzionario!",
+                "Il mondo non sarà più lo stesso dopo questo clic.",
+                "Sei un maestro del clic!",
+                "Potere al pulsante!",
+                "Clic dopo clic, cambierai il mondo!",
+                "Hai mai pensato a quanto sia soddisfacente cliccare?",
+                "Questo pulsante si sente amato.",
+                "Un altro clic verso la grandezza!",
+                "I filosofi si chiedono: 'Se un pulsante viene cliccato e nessuno è lì a vederlo, ha fatto rumore?'",
+                "Cliccare o non cliccare? Ma sì, clicca ancora!",
+                "Il tuo dito è destinato a grandi cose.",
+                "Questo pulsante è stato cliccato più volte di quanto tu abbia detto 'scusa' nella tua vita.",
+                "La vita è come un pulsante: a volte devi solo cliccarci sopra.",
+                "Sei sulla buona strada per diventare un professionista del clic!",
+                "Il pulsante è contento del tuo clic. Sorride internamente."
+            ];
+            
+            // Obiettivi
+            const goals = [5, 10, 30, 50, 100, 1000, 10000, 100000];
+            
+            // Inizializzazione
+            updateClickCount();
+            updateProgressBar();
+            
+            // Cambio tema
+            themeToggle.addEventListener('click', function() {
+                isDarkMode = !isDarkMode;
+                document.body.classList.toggle('dark-mode', isDarkMode);
+                themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+            });
+            
+            // Gestione del pulsante principale
+            mainButton.addEventListener('click', function() {
+                clickCount++;
+                updateClickCount();
+                showRandomMessage();
+                checkAchievements();
+                updateProgressBar();
+                
+                // Effetti speciali ogni tot clic
+                if (clickCount % 7 === 0) {
+                    createConfetti();
+                }
+                
+                if (clickCount % 13 === 0) {
+                    changeButtonColor();
+                }
+                
+                if (clickCount % 50 === 0) {
+                    createFireworks();
+                }
+                
+                // Effetto di scuotimento
+                mainButton.style.animation = 'none';
+                setTimeout(() => {
+                    mainButton.style.animation = 'shake 0.5s';
+                }, 10);
+            });
+            
+            // Easter egg
+            let easterEggClicks = 0;
+            easterEgg.addEventListener('click', function() {
+                easterEggClicks++;
+                if (easterEggClicks >= 3) {
+                    alert('🎉 Easter egg sbloccato! Sei un esploratore!');
+                    easterEggClicks = 0;
+                }
+            });
+            
+            // Funzioni
+            function updateClickCount() {
+                clickCountElement.textContent = clickCount.toLocaleString();
+            }
+            
+            function showRandomMessage() {
+                const randomIndex = Math.floor(Math.random() * messages.length);
+                messageBox.textContent = messages[randomIndex];
+                
+                // Animazione del messaggio
+                messageBox.style.animation = 'none';
+                setTimeout(() => {
+                    messageBox.style.animation = 'fadeIn 0.5s';
+                }, 10);
+            }
+            
+            function checkAchievements() {
+                // Sblocco obiettivi
+                if (clickCount === 5) {
+                    unlockAchievement('achievement1');
+                } else if (clickCount === 10) {
+                    unlockAchievement('achievement2');
+                } else if (clickCount === 30) {
+                    unlockAchievement('achievement3');
+                } else if (clickCount === 50) {
+                    unlockAchievement('achievement4');
+                } else if (clickCount === 100) {
+                    unlockAchievement('achievement5');
+                    createConfetti();
+                } else if (clickCount === 1000) {
+                    unlockAchievement('achievement6');
+                    document.getElementById('achievement6').classList.add('legendary-achievement');
+                    createConfetti();
+                    alert('🎖️ Complimenti! Hai raggiunto 1,000 clic! Sei una Leggenda del Clic!');
+                } else if (clickCount === 10000) {
+                    unlockAchievement('achievement7');
+                    document.getElementById('achievement7').classList.add('special-achievement');
+                    createConfetti();
+                    alert('🏆 INCREDIBILE! Hai raggiunto 10,000 clic! Sei un Eroe del Clic!');
+                } else if (clickCount === 100000) {
+                    unlockAchievement('achievement8');
+                    document.getElementById('achievement8').classList.add('godlike-achievement');
+                    createConfetti();
+                    alert('👑 DIVINO! Hai raggiunto 100,000 clic! Sei una Divinità del Clic!');
+                }
+            }
+            
+            function updateProgressBar() {
+                let nextGoalIndex = goals.findIndex(goal => goal > clickCount);
+                if (nextGoalIndex === -1) {
+                    // Tutti gli obiettivi sono stati raggiunti
+                    progressBar.style.width = '100%';
+                    nextGoalElement.textContent = 'Completato!';
+                    return;
+                }
+                
+                const nextGoal = goals[nextGoalIndex];
+                const prevGoal = nextGoalIndex > 0 ? goals[nextGoalIndex - 1] : 0;
+                
+                const progress = ((clickCount - prevGoal) / (nextGoal - prevGoal)) * 100;
+                progressBar.style.width = Math.min(progress, 100) + '%';
+                nextGoalElement.textContent = nextGoal.toLocaleString();
+            }
+            
+            function unlockAchievement(achievementId) {
+                const achievement = document.getElementById(achievementId);
+                achievement.classList.add('unlocked');
+                achievement.querySelector('.achievement-icon').textContent = '✅';
+                
+                // Messaggio speciale per obiettivo sbloccato
+                messageBox.textContent = 'Obiettivo sbloccato: ' + achievement.textContent.replace('✅', '').trim();
+            }
+            
+            function createConfetti() {
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = getRandomColor();
+                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                    document.body.appendChild(confetti);
+                    
+                    // Rimuovi i confetti dopo l'animazione
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+            
+            function createFireworks() {
+                for (let i = 0; i < 20; i++) {
+                    const firework = document.createElement('div');
+                    firework.className = 'confetti';
+                    firework.style.left = Math.random() * 100 + '%';
+                    firework.style.backgroundColor = getRandomBrightColor();
+                    firework.style.width = '15px';
+                    firework.style.height = '15px';
+                    firework.style.borderRadius = '50%';
+                    firework.style.animation = 'confetti-fall 3s linear forwards';
+                    document.body.appendChild(firework);
+                    
+                    // Rimuovi i fuochi d'artificio dopo l'animazione
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 3000);
+                }
+            }
+            
+            function changeButtonColor() {
+                const hue = Math.floor(Math.random() * 360);
+                document.documentElement.style.setProperty('--primary-color', `hsl(${hue}, 70%, 60%)`);
+                document.documentElement.style.setProperty('--secondary-color', `hsl(${hue + 40}, 70%, 60%)`);
+            }
+            
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+            
+            function getRandomBrightColor() {
+                const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFA500', '#FF69B4'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            // Aggiungi stili per animazioni
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0% { transform: translateX(0); }
+                    20% { transform: translateX(-10px); }
+                    40% { transform: translateX(10px); }
+                    60% { transform: translateX(-10px); }
+                    80% { transform: translateX(10px); }
+                    100% { transform: translateX(0); }
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
